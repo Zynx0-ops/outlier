@@ -1,0 +1,20 @@
+{
+  "name": "outlier",
+  "private": true,
+  "version": "0.1.0",
+  "description": "A daily rare-answer trivia game. The rarer your answer, the higher you launch.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "typecheck": "tsc"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^7.0.2",
+    "vite": "^8.3.0",
+    "vitest": "^5.0.0"
+  }
+}
