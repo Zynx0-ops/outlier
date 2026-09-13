@@ -4,6 +4,7 @@ export interface Tier {
   id: TierId;
   name: string;
   points: number;
+  /** Used in plain-text share results. */
   emoji: string;
   blurb: string;
 }
@@ -11,11 +12,11 @@ export interface Tier {
 /** Ordered from least to most rare. */
 export const TIERS: readonly Tier[] = [
   { id: 'obvious', name: 'Obvious', points: 10, emoji: '⬜', blurb: 'Half the planet said this.' },
-  { id: 'clever', name: 'Galaxy Brain', points: 15, emoji: '🟦', blurb: 'The “obscure” pick everyone thinks only they know.' },
+  { id: 'clever', name: 'Galaxy Brain', points: 15, emoji: '🟫', blurb: 'The “obscure” pick everyone thinks only they know.' },
   { id: 'uncommon', name: 'Uncommon', points: 30, emoji: '🟩', blurb: 'Off the beaten path.' },
-  { id: 'rare', name: 'Rare', points: 60, emoji: '🟨', blurb: 'Most people never get here.' },
-  { id: 'deep', name: 'Deep Space', points: 85, emoji: '🟧', blurb: 'A genuinely deep cut.' },
-  { id: 'outlier', name: 'Outlier', points: 100, emoji: '🌟', blurb: 'The hand-picked gem. One in a billion.' },
+  { id: 'rare', name: 'Rare', points: 60, emoji: '🟦', blurb: 'Most people never think of this.' },
+  { id: 'deep', name: 'Deep Space', points: 85, emoji: '🟪', blurb: 'A genuinely deep cut.' },
+  { id: 'outlier', name: 'Outlier', points: 100, emoji: '⭐', blurb: 'The hand-picked gem for this prompt.' },
 ];
 
 export const MISS_EMOJI = '⬛';

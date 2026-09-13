@@ -1,5 +1,5 @@
 import { daysBetween } from './schedule';
-import type { RoundResult } from './types';
+import { tierIndex, type RoundResult } from './types';
 
 export interface GameRecord {
   score: number;
@@ -18,6 +18,9 @@ export interface Profile {
   lastDaily: string | null;
   unlimitedPlayed: number;
   unlimitedBest: number;
+  bestScore: number;
+  /** Index 0 counts misses; 1–6 count each tier from Obvious to Outlier. */
+  tierCounts: number[];
   seenIntro: boolean;
 }
 
@@ -30,6 +33,8 @@ export const emptyProfile = (): Profile => ({
   lastDaily: null,
   unlimitedPlayed: 0,
   unlimitedBest: 0,
+  bestScore: 0,
+  tierCounts: [0, 0, 0, 0, 0, 0, 0],
   seenIntro: false,
 });
 
@@ -51,25 +56,35 @@ export function saveProfile(profile: Profile): void {
   }
 }
 
+function tally(profile: Profile, rounds: RoundResult[], score: number): Profile {
+  const tierCounts = [...profile.tierCounts];
+  for (const r of rounds) tierCounts[r.tier ? tierIndex(r.tier) + 1 : 0]++;
+  return { ...profile, tierCounts, bestScore: Math.max(profile.bestScore, score) };
+}
+
 export function recordDaily(profile: Profile, record: DailyRecord): Profile {
   if (profile.daily[record.date]) return profile;
   const continues = profile.lastDaily !== null && daysBetween(profile.lastDaily, record.date) === 1;
   const streak = continues ? profile.streak + 1 : 1;
-  return {
-    ...profile,
-    daily: { ...profile.daily, [record.date]: record },
-    streak,
-    bestStreak: Math.max(profile.bestStreak, streak),
-    lastDaily: record.date,
-  };
+  return tally(
+    {
+      ...profile,
+      daily: { ...profile.daily, [record.date]: record },
+      streak,
+      bestStreak: Math.max(profile.bestStreak, streak),
+      lastDaily: record.date,
+    },
+    record.rounds,
+    record.score,
+  );
 }
 
-export function recordUnlimited(profile: Profile, score: number): Profile {
-  return {
-    ...profile,
-    unlimitedPlayed: profile.unlimitedPlayed + 1,
-    unlimitedBest: Math.max(profile.unlimitedBest, score),
-  };
+export function recordUnlimited(profile: Profile, rounds: RoundResult[], score: number): Profile {
+  return tally(
+    { ...profile, unlimitedPlayed: profile.unlimitedPlayed + 1, unlimitedBest: Math.max(profile.unlimitedBest, score) },
+    rounds,
+    score,
+  );
 }
 
 /** A streak survives until a full calendar day is skipped. */

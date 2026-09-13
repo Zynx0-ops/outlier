@@ -1,0 +1,13 @@
+{
+  "name": "Outlier",
+  "short_name": "Outlier",
+  "description": "Rare-answer trivia. The rarer your answer, the higher you launch.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#F2F2F7",
+  "theme_color": "#F2F2F7",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

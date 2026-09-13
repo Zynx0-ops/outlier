@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { altitudeKm, MAX_SCORE, MOON_KM } from '../src/altitude';
+import { altitudeKm, kmToPoints, MAX_SCORE, MOON_KM } from '../src/altitude';
 import { PROMPTS, PROMPT_IDS, promptById } from '../src/data';
 import { AnswerIndex, normalize } from '../src/match';
 import { dailyIds, dayNumber, ROUNDS, seededIds } from '../src/schedule';
 import { challengeHash, parseChallenge, scoreFromDigits } from '../src/share';
-import { emptyProfile, liveStreak, recordDaily } from '../src/storage';
+import { emptyProfile, liveStreak, recordDaily, recordUnlimited } from '../src/storage';
 import type { RoundResult } from '../src/types';
 
 const matcher = (id: string) => new AnswerIndex(promptById(id)!);
@@ -104,6 +104,12 @@ describe('altitude', () => {
     expect(altitudeKm(0)).toBe(0);
     expect(altitudeKm(MAX_SCORE)).toBeCloseTo(MOON_KM);
   });
+
+  it('maps altitude back onto the score scale the flight animation uses', () => {
+    for (const score of [0, 10, 135, 350, 612, MAX_SCORE]) {
+      expect(kmToPoints(altitudeKm(score))).toBeCloseTo(score);
+    }
+  });
 });
 
 describe('sharing', () => {
@@ -131,5 +137,17 @@ describe('streaks', () => {
     p = recordDaily(p, day('2026-09-17'));
     expect(p.streak).toBe(1);
     expect(p.bestStreak).toBe(2);
+  });
+
+  it('tallies tiers and best score across daily and unlimited games', () => {
+    const rounds: RoundResult[] = [
+      { promptId: 'a', input: 'x', answer: 'x', tier: 'rare', points: 60 },
+      { promptId: 'b', input: '', answer: null, tier: null, points: 0 },
+    ];
+    let p = recordDaily(emptyProfile(), { ...day('2026-09-13'), score: 60, rounds });
+    p = recordUnlimited(p, rounds, 60);
+    expect(p.tierCounts).toEqual([2, 0, 0, 0, 2, 0, 0]);
+    expect(p.bestScore).toBe(60);
+    expect(p.unlimitedPlayed).toBe(1);
   });
 });

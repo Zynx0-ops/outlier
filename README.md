@@ -20,12 +20,20 @@ Inspired by [Krillion](https://krillion.io), which dives down into the ocean. Ou
 
 | Tier | Points | Meaning |
 | --- | --- | --- |
-| 🌟 Outlier | 100 | The single hand-picked gem for the prompt |
-| 🟧 Deep Space | 85 | A genuinely deep cut |
-| 🟨 Rare | 60 | Most people never get here |
+| ⭐ Outlier | 100 | The single hand-picked gem for the prompt |
+| 🟪 Deep Space | 85 | A genuinely deep cut |
+| 🟦 Rare | 60 | Most people never think of this |
 | 🟩 Uncommon | 30 | Off the beaten path |
-| 🟦 Galaxy Brain | 15 | The "obscure" pick that *everyone* thinks only they know |
+| 🟫 Galaxy Brain | 15 | The "obscure" pick that *everyone* thinks only they know |
 | ⬜ Obvious | 10 | Half the planet said this |
+
+### The launch
+
+Every locked-in answer plays a short launch animation. The engine ignites and the camera follows the rocket up through a sky that darkens as you climb. Clouds, airliners, the ISS and satellites pass by, each landmark is labeled with its altitude, and the altimeter counts up in real time. A missed answer makes the engine sputter and stall. Landing an Outlier sets off a gold burst. Tap anywhere, or press Space, to skip the animation.
+
+### Design
+
+The interface follows Apple's design language. It uses the system font (SF Pro on Apple devices, Inter elsewhere), the iOS system color palette with automatic light and dark mode, frosted-glass materials, inset grouped lists, a tab bar, bottom sheets, alerts and SF Symbols–style icons. It can be added to an iPhone home screen, where it runs full screen with its own app icon.
 
 ### Altitude
 
@@ -46,12 +54,18 @@ It's plain TypeScript with Vite and no framework. Every push to `main` is tested
 
 ```
 src/
-  main.ts        screens: home, play, reveal, results
+  main.ts        wires the screens together
+  screens.ts     Play, Stats and How to Play tabs, the mission report
+  mission.ts     a mission in progress: question card, timer, result sheet
+  scene.ts       the sky, rocket and launch animation
+  ui.ts          shared UI pieces: mounting, tiles, toasts, alerts
+  icons.ts       SF Symbols–style SVG icons
+  game.ts        creating and saving daily / unlimited games
   match.ts       answer normalization + typo-tolerant matching
   schedule.ts    seeded daily / unlimited prompt selection
   altitude.ts    score → kilometres, landmarks
   share.ts       emoji share text + challenge links
-  storage.ts     local stats and streaks
+  storage.ts     local stats, streaks and rarity breakdown
   data/          the prompt catalog
 tests/core.test.ts
 ```

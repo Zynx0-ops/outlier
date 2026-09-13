@@ -1,4 +1,5 @@
 export const ROUNDS = 7;
+export const ROUND_SECONDS = 20;
 export const LAUNCH_DATE = '2026-09-13';
 
 export function hashString(s: string): number {
