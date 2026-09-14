@@ -1,7 +1,7 @@
 import { altitudeKm, formatAltitude, landmarkAt, MAX_SCORE } from './altitude';
 import { dailyGame, saveGame, total, unlimitedGame, type Game } from './game';
 import { icon, type IconName } from './icons';
-import { shipSvg, skyColors } from './scene';
+import { rocketSvg, skyBands } from './scene';
 import { dateKey, dayNumber, randomSeed, ROUND_SECONDS, ROUNDS } from './schedule';
 import { challengeHash, copyText, parseChallenge, scoreFromDigits, shareText } from './share';
 import { setProfile, state } from './state';
@@ -9,18 +9,9 @@ import { liveStreak } from './storage';
 import { TIERS, tierById, type TierId } from './types';
 import { dots, esc, iconTile, mount, nav, onUnmount, pageUrl, tierTile, toast, type Tab } from './ui';
 
-const APP_ICON = `<svg viewBox="0 0 512 512" aria-hidden="true">
-  <defs><linearGradient id="appicon-bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0B1640"/><stop offset=".55" stop-color="#2C6BD0"/><stop offset="1" stop-color="#86BDF2"/></linearGradient></defs>
-  <rect width="512" height="512" fill="url(#appicon-bg)"/>
-  <circle cx="392" cy="112" r="46" fill="#F2F2F7"/>
-  <g fill="#fff"><circle cx="96" cy="92" r="5"/><circle cx="170" cy="164" r="3.5"/><circle cx="286" cy="70" r="4"/><circle cx="84" cy="250" r="3"/></g>
-  <g transform="translate(262 300) rotate(35) scale(2.7) translate(-28 -53)">${shipSvg('appicon').replace(/<\/?svg[^>]*>/g, '')}</g>
-</svg>`;
+const APP_ICON = `<div class="app-icon-art" style="background:${skyBands(0.45)}">${rocketSvg()}</div>`;
 
-const skyStyle = (score: number): string => {
-  const [top, horizon] = skyColors(score / MAX_SCORE);
-  return `background:linear-gradient(165deg, ${top}, ${horizon})`;
-};
+const skyStyle = (score: number): string => `background:${skyBands(score / MAX_SCORE)}`;
 
 const digitTiers = (digits: number[]): (TierId | null)[] => digits.map((d) => (d > 0 ? TIERS[d - 1].id : null));
 
@@ -33,7 +24,7 @@ function tabBar(active: Tab): string {
   const tabs: [Tab, IconName, string][] = [
     ['play', 'rocket', 'Play'],
     ['stats', 'chart', 'Stats'],
-    ['help', 'question', 'How to Play'],
+    ['help', 'question', 'Help'],
   ];
   return `<nav class="tabbar">${tabs
     .map(
@@ -84,11 +75,11 @@ function home(): void {
   } else {
     hero = `<section class="hero" style="${skyStyle(0)}">
       <div class="hero-hill"></div>
-      <div class="hero-ship">${shipSvg('hero')}</div>
+      <div class="hero-ship">${rocketSvg()}</div>
       <div class="hero-eyebrow">Today’s Mission · #${day}</div>
       <h2 class="hero-title">How high can you fly?</h2>
       <p class="hero-sub">${ROUNDS} prompts, ${ROUND_SECONDS} seconds each. Rare answers launch you higher.</p>
-      <div class="hero-foot"><button class="btn btn-white" data-act="daily">${icon('rocket')} Launch</button></div>
+      <div class="hero-foot"><button class="btn btn-white" data-act="daily">${icon('rocket')} <span class="blink">Press start</span></button></div>
     </section>`;
   }
 

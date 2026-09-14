@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { altitudeKm, kmToPoints, MAX_SCORE, MOON_KM } from '../src/altitude';
 import { PROMPTS, PROMPT_IDS, promptById } from '../src/data';
+import { ICON_SPRITES } from '../src/icons';
+import * as sprites from '../src/sprites';
 import { AnswerIndex, normalize } from '../src/match';
 import { dailyIds, dayNumber, ROUNDS, seededIds } from '../src/schedule';
 import { challengeHash, parseChallenge, scoreFromDigits } from '../src/share';
@@ -8,6 +10,21 @@ import { emptyProfile, liveStreak, recordDaily, recordUnlimited } from '../src/s
 import type { RoundResult } from '../src/types';
 
 const matcher = (id: string) => new AnswerIndex(promptById(id)!);
+
+describe('pixel art', () => {
+  const art: [string, readonly string[]][] = [
+    ...Object.entries(sprites).filter((e): e is [string, readonly string[]] => Array.isArray(e[1])),
+    ...Object.entries(ICON_SPRITES),
+  ];
+
+  it.each(art)('%s is rectangular and uses palette colours', (_, rows) => {
+    expect(rows.length).toBeGreaterThan(0);
+    for (const row of rows) {
+      expect(row).toHaveLength(rows[0].length);
+      for (const ch of row) expect(ch === '.' || ch === '#' || ch in sprites.PALETTE, `unknown pixel "${ch}"`).toBe(true);
+    }
+  });
+});
 
 describe('prompt data', () => {
   it('has unique prompt ids', () => {

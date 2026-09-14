@@ -29,11 +29,11 @@ Inspired by [Krillion](https://krillion.io), which dives down into the ocean. Ou
 
 ### The launch
 
-Every locked-in answer plays a short launch animation. The engine ignites and the camera follows the rocket up through a sky that darkens as you climb. Clouds, airliners, the ISS and satellites pass by, each landmark is labeled with its altitude, and the altimeter counts up in real time. A missed answer makes the engine sputter and stall. Landing an Outlier sets off a gold burst. Tap anywhere, or press Space, to skip the animation.
+Every locked-in answer plays a short launch. The engine lights, then the camera locks onto the pixel rocket and scrolls the world past it, snapped to whole pixels. The sky steps through hard color bands from daylight to black, and pixel clouds, a plane, satellites, Earth and the Moon go by. Each landmark is labeled with its altitude, and the ALT readout counts up. A missed answer makes the engine sputter and puff smoke. Landing an Outlier flashes the screen and sets off sparkles. Tap anywhere, or press Space, to skip.
 
 ### Design
 
-The interface follows Apple's design language. It uses the system font (SF Pro on Apple devices, Inter elsewhere), the iOS system color palette with automatic light and dark mode, frosted-glass materials, inset grouped lists, a tab bar, bottom sheets, alerts and SF Symbols–style icons. It can be added to an iPhone home screen, where it runs full screen with its own app icon.
+Outlier looks like an 8-bit arcade game. It uses a fixed 16-color palette, Press Start 2P and VT323 pixel fonts, chunky bordered panels with hard drop shadows, CRT scanlines, and pixel-art sprites and icons drawn from text bitmaps in `src/sprites.ts` and `src/icons.ts`. Animations move in discrete steps, like frames on an old console, with no blur and no easing. It can be added to an iPhone home screen, where it runs full screen with its own pixel app icon.
 
 ### Altitude
 
@@ -58,8 +58,10 @@ src/
   screens.ts     Play, Stats and How to Play tabs, the mission report
   mission.ts     a mission in progress: question card, timer, result sheet
   scene.ts       the sky, rocket and launch animation
+  sprites.ts     pixel-art sprites and the palette they draw with
   ui.ts          shared UI pieces: mounting, tiles, toasts, alerts
-  icons.ts       SF Symbols–style SVG icons
+  icons.ts       8-bit icons
+  styles/        base, app and mission stylesheets
   game.ts        creating and saving daily / unlimited games
   match.ts       answer normalization + typo-tolerant matching
   schedule.ts    seeded daily / unlimited prompt selection
